@@ -3,9 +3,6 @@ import { ApolloServer, ApolloError } from "apollo-server-lambda";
 import "reflect-metadata";
 import { buildSchemaSync } from "type-graphql";
 import { Container } from "typedi";
-import dotenv from "dotenv";
-dotenv.config();
-
 import { PlaylistResolver } from "./resolvers/PlaylistResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 import { CredentialsResolver } from "./resolvers/CredentialsResolver";
