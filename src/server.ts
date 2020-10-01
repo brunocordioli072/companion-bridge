@@ -26,8 +26,11 @@ const server = new ApolloServer({
   playground: true,
   context: function (event: any) {
     let req: Request = event.event;
-    if (req.headers.authorization)
-      process.env.ACCESS_TOKEN = req.headers.authorization;
+    const authorization = req.headers.authorization
+      ? req.headers.authorization
+      : req.headers.Authorization;
+    if (authorization && typeof authorization == "string")
+      process.env.ACCESS_TOKEN = authorization;
   },
 });
 
