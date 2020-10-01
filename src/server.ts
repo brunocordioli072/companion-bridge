@@ -26,13 +26,20 @@ const server = new ApolloServer({
   playground: true,
   context: function (event: any) {
     let req: Request = event.event;
-    console.log(req.headers)
     const authorization = req.headers.authorization
       ? req.headers.authorization
       : req.headers.Authorization;
+    console.log("authorization", authorization);
     if (authorization && typeof authorization == "string")
       process.env.ACCESS_TOKEN = authorization;
+
+    console.log(" process.env.ACCESS_TOKEN", process.env.ACCESS_TOKEN);
   },
 });
 
-exports.handler = server.createHandler();
+exports.handler = server.createHandler({
+  cors: {
+    origin: true,
+    credentials: true,
+  },
+});
