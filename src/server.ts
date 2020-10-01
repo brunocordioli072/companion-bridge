@@ -26,6 +26,7 @@ const server = new ApolloServer({
   playground: true,
   context: function (event: any) {
     let req: Request = event.event;
+    console.log(req.headers)
     const authorization = req.headers.authorization
       ? req.headers.authorization
       : req.headers.Authorization;
