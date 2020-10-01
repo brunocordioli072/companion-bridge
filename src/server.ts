@@ -29,11 +29,8 @@ const server = new ApolloServer({
     const authorization = req.headers.authorization
       ? req.headers.authorization
       : req.headers.Authorization;
-    console.log("authorization", authorization);
     if (authorization && typeof authorization == "string")
       process.env.ACCESS_TOKEN = authorization;
-
-    console.log(" process.env.ACCESS_TOKEN", process.env.ACCESS_TOKEN);
   },
 });
 
