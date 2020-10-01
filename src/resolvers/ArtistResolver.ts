@@ -9,16 +9,17 @@ export class ArtistResolver {
 
   @Query(() => [Artist], { name: "artists" })
   async searchArtists(
+    @Arg("query", { nullable: true }) query?: string,
     @Arg("name", { nullable: true }) artistName?: string,
     @Arg("track", { nullable: true }) trackName?: string,
     @Arg("limit", { nullable: true }) limit: number = 12
   ): Promise<Artist[]> {
     let artists: Artist[] = [];
     let items: Artist[] = [];
-    if (artistName && trackName) {
-      items = await this.artistsByName(artistName, Math.floor(limit / 2));
+    if (query) {
+      items = await this.artistsByName(query, Math.floor(limit / 2));
       artists.push(...items);
-      items = await this.artistsByTrackName(trackName, Math.floor(limit / 2));
+      items = await this.artistsByTrackName(query, Math.floor(limit / 2));
       artists.push(...items);
     } else if (artistName) {
       items = await this.artistsByName(artistName, limit);
@@ -72,7 +73,7 @@ export class ArtistResolver {
     return artistSearch.body.artists ? artistSearch.body.artists : [];
   }
 
-  @Query(() => [Artist])
+  @Query(() => [Track])
   async artistTopTracks(
     @Arg("artistId", { nullable: true }) artistId: string
   ): Promise<Track[]> {

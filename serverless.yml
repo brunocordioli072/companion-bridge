@@ -1,7 +1,9 @@
 service: companion-bridge
 provider:
   name: aws
+  stage: prod
   runtime: nodejs12.x
+  
 functions:
   graphql:
     # this is formatted as <FILENAME>.<HANDLER>

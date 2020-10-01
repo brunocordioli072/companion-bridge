@@ -9,10 +9,10 @@ import { SpotifyService } from "../services/SpotifyService";
 export class PlaylistResolver {
   constructor(private readonly spotifyService: SpotifyService) {}
 
-  @Mutation(() => VoidResolver, { nullable: true })
+  @Mutation(() => Playlist, { nullable: true })
   async insertPlaylist(
     @Arg("playlistName", { nullable: true }) playlistName: string
-  ): Promise<void> {
+  ): Promise<Playlist> {
     let playlists: Playlist[] = [];
     let playlistSearch = await this.spotifyService.getUserPlaylists();
     playlists = playlistSearch.body.items;
@@ -20,9 +20,14 @@ export class PlaylistResolver {
     if (!playlistNames.includes(playlistName)) {
       let userSearch = await this.spotifyService.getMe();
       let user = userSearch.body;
-      await this.spotifyService.createPlaylist(user.id, playlistName, {
-        public: true,
-      });
+      let res = await this.spotifyService.createPlaylist(
+        user.id,
+        playlistName,
+        {
+          public: true,
+        }
+      );
+      return res.body;
     } else {
       throw new ApolloError("Playlist Not Found", "404");
     }
