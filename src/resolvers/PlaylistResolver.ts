@@ -1,6 +1,7 @@
 import { ApolloError } from "apollo-server-lambda";
 import { VoidResolver } from "graphql-scalars";
-import { Resolver, Mutation, Arg } from "type-graphql";
+import { Resolver, Mutation, Arg, Ctx } from "type-graphql";
+import { Context } from "vm";
 import { Playlist } from "../entities/Playlist";
 import { Track } from "../entities/Track";
 import { SpotifyService } from "../services/SpotifyService";
@@ -11,8 +12,10 @@ export class PlaylistResolver {
 
   @Mutation(() => Playlist, { nullable: true })
   async insertPlaylist(
-    @Arg("playlistName", { nullable: true }) playlistName: string
+    @Arg("playlistName", { nullable: true }) playlistName: string,
+    @Ctx() ctx?: Context
   ): Promise<Playlist> {
+    this.spotifyService.setTokenByContext(ctx);
     let playlists: Playlist[] = [];
     let playlistSearch = await this.spotifyService.getUserPlaylists();
     playlists = playlistSearch.body.items;
@@ -37,8 +40,10 @@ export class PlaylistResolver {
   async insertArtistsToPlaylist(
     @Arg("playlistId", { nullable: true }) playlistId: string,
     @Arg("artistIds", (type) => [String], { nullable: true })
-    artistIds: string[]
+    artistIds: string[],
+    @Ctx() ctx?: Context
   ): Promise<void> {
+    this.spotifyService.setTokenByContext(ctx);
     let tracks: Track[] = [];
     for (let index = 0; index < artistIds.length; index++) {
       const artistId = artistIds[index];
@@ -54,15 +59,19 @@ export class PlaylistResolver {
 
   @Mutation(() => VoidResolver, { nullable: true })
   async deletePlaylist(
-    @Arg("playlistId", { nullable: true }) playlistId: string
+    @Arg("playlistId", { nullable: true }) playlistId: string,
+    @Ctx() ctx?: Context
   ): Promise<void> {
+    this.spotifyService.setTokenByContext(ctx);
     await this.spotifyService.unfollowPlaylist(playlistId);
   }
 
   @Mutation(() => VoidResolver, { nullable: true })
   async cleanPlaylistTracks(
-    @Arg("playlistId", { nullable: true }) playlistId: string
+    @Arg("playlistId", { nullable: true }) playlistId: string,
+    @Ctx() ctx?: Context
   ): Promise<void> {
+    this.spotifyService.setTokenByContext(ctx);
     let trackSearch = await this.spotifyService.getPlaylistTracks(playlistId);
     let tracks = trackSearch.body.items;
     let tracksURIs = tracks.map((t) => {
