@@ -1,11 +1,11 @@
-import { Field, ObjectType } from "type-graphql";
+import {Field, ObjectType} from 'type-graphql';
 
-@ObjectType({ simpleResolvers: true })
+@ObjectType({simpleResolvers: true})
 export class Image {
-  @Field({ nullable: true })
+  @Field({nullable: true})
   height?: number;
-  @Field({ nullable: true })
+  @Field({nullable: true})
   url: string;
-  @Field({ nullable: true })
+  @Field({nullable: true})
   width?: number;
 }

@@ -1,30 +1,30 @@
-import { ObjectType, Field } from "type-graphql";
-import GraphQLJSON from "graphql-type-json";
+import {ObjectType, Field} from 'type-graphql';
+import GraphQLJSON from 'graphql-type-json';
 
-@ObjectType({ simpleResolvers: true })
+@ObjectType({simpleResolvers: true})
 export class User {
-  @Field({ nullable: true })
+  @Field({nullable: true})
   birthdate: string;
-  @Field({ nullable: true })
+  @Field({nullable: true})
   country: string;
-  @Field({ nullable: true })
+  @Field({nullable: true})
   email: string;
-  @Field({ nullable: true })
+  @Field({nullable: true})
   product: string;
-  @Field({ nullable: true })
+  @Field({nullable: true})
   display_name?: string;
-  @Field((type) => GraphQLJSON, { nullable: true })
+  @Field(() => GraphQLJSON, {nullable: true})
   external_urls: any;
-  @Field((type) => GraphQLJSON,{ nullable: true })
+  @Field(() => GraphQLJSON, {nullable: true})
   followers?: any;
-  @Field({ nullable: true })
+  @Field({nullable: true})
   href: string;
-  @Field({ nullable: true })
+  @Field({nullable: true})
   id: string;
-  @Field((type) => [GraphQLJSON], { nullable: true })
+  @Field(() => [GraphQLJSON], {nullable: true})
   images?: any[];
-  @Field((type) => String, { nullable: true })
+  @Field(() => String, {nullable: true})
   type: any;
-  @Field({ nullable: true })
+  @Field({nullable: true})
   uri: string;
 }

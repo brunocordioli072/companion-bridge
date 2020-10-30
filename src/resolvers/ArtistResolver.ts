@@ -1,20 +1,19 @@
-import { ApolloError } from "apollo-server-lambda";
-import { Resolver, Query, Ctx, Arg } from "type-graphql";
-import { Artist } from "../entities/Artist";
-import { SpotifyService } from "../services/SpotifyService";
-import _ from "lodash";
-import { Track } from "../entities/Track";
-import { Context } from "vm";
-@Resolver((of) => Artist)
+import {Resolver, Query, Ctx, Arg} from 'type-graphql';
+import {Artist} from '../entities/Artist';
+import {SpotifyService} from '../services/SpotifyService';
+import _ from 'lodash';
+import {Track} from '../entities/Track';
+import {Context} from 'vm';
+@Resolver(() => Artist)
 export class ArtistResolver {
   constructor(private readonly spotifyService: SpotifyService) {}
 
-  @Query(() => [Artist], { name: "artists" })
+  @Query(() => [Artist], {name: 'artists'})
   async searchArtists(
-    @Arg("query", { nullable: true }) query?: string,
-    @Arg("name", { nullable: true }) artistName?: string,
-    @Arg("track", { nullable: true }) trackName?: string,
-    @Arg("limit", { nullable: true }) limit: number = 12,
+    @Arg('query', {nullable: true}) query?: string,
+    @Arg('name', {nullable: true}) artistName?: string,
+    @Arg('track', {nullable: true}) trackName?: string,
+    @Arg('limit', {nullable: true}) limit = 12,
     @Ctx() ctx?: Context
   ): Promise<Artist[]> {
     this.spotifyService.setTokenByContext(ctx);
@@ -39,17 +38,17 @@ export class ArtistResolver {
       artists.push(...items);
     }
     artists = artists.sort((a, b) => b.popularity - a.popularity);
-    return _.uniqBy(artists, "id");
+    return _.uniqBy(artists, 'id');
   }
 
   @Query(() => [Artist])
   async artistsRelatedByArtistId(
-    @Arg("artistId", { nullable: true }) artistId: string,
-    @Arg("limit", { nullable: true }) limit: number,
+    @Arg('artistId', {nullable: true}) artistId: string,
+    @Arg('limit', {nullable: true}) limit: number,
     @Ctx() ctx?: Context
   ): Promise<Artist[]> {
     this.spotifyService.setTokenByContext(ctx);
-    let artistSearch = await this.spotifyService.getArtistRelatedArtists(
+    const artistSearch = await this.spotifyService.getArtistRelatedArtists(
       artistId
     );
     return artistSearch.body.artists ? artistSearch.body.artists : [];
@@ -57,13 +56,13 @@ export class ArtistResolver {
 
   @Query(() => [Track])
   async artistTopTracks(
-    @Arg("artistId", { nullable: true }) artistId: string,
+    @Arg('artistId', {nullable: true}) artistId: string,
     @Ctx() ctx?: Context
   ): Promise<Track[]> {
     this.spotifyService.setTokenByContext(ctx);
-    let artistSearch = await this.spotifyService.getArtistTopTracks(
+    const artistSearch = await this.spotifyService.getArtistTopTracks(
       artistId,
-      "GB"
+      'GB'
     );
     return artistSearch.body.tracks ? artistSearch.body.tracks : [];
   }

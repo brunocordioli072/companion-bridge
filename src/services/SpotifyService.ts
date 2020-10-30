@@ -1,9 +1,9 @@
-import SpotifyWebApi from "spotify-web-api-node";
-import { Service } from "typedi";
-import { Artist } from "../entities/Artist";
-import _ from "lodash";
-import { ApolloError } from "apollo-server-lambda";
-import { Context } from "vm";
+import SpotifyWebApi from 'spotify-web-api-node';
+import {Service} from 'typedi';
+import {Artist} from '../entities/Artist';
+import _ from 'lodash';
+import {ApolloError} from 'apollo-server-lambda';
+import {Context} from 'vm';
 @Service()
 export class SpotifyService extends SpotifyWebApi {
   constructor() {
@@ -14,7 +14,7 @@ export class SpotifyService extends SpotifyWebApi {
   }
 
   async artistsByName(name: string, limit: number): Promise<Artist[]> {
-    let artistSearch = await this.search(name, ["artist"], {
+    const artistSearch = await this.search(name, ['artist'], {
       limit,
     });
     return artistSearch.body.artists ? artistSearch.body.artists.items : [];
@@ -24,24 +24,24 @@ export class SpotifyService extends SpotifyWebApi {
     trackName: string,
     limit: number
   ): Promise<Artist[]> {
-    let trackSearch = await this.search(trackName, ["track"], {
+    const trackSearch = await this.search(trackName, ['track'], {
       limit,
     });
-    let tracks = trackSearch.body.tracks ? trackSearch.body.tracks.items : [];
-    let artistIds = _.flatMap(
-      tracks.map((i) => {
-        return i.artists.map((a) => {
+    const tracks = trackSearch.body.tracks ? trackSearch.body.tracks.items : [];
+    const artistIds = _.flatMap(
+      tracks.map(i => {
+        return i.artists.map(a => {
           return a.id;
         });
       })
     );
-    let artistSearch = await this.getArtists(artistIds);
+    const artistSearch = await this.getArtists(artistIds);
     return artistSearch.body.artists;
   }
 
   setTokenByContext(ctx?: Context) {
     if (!ctx || !ctx.SPOTIFY_TOKEN)
-      throw new ApolloError("Missing Token", "401");
+      throw new ApolloError('Missing Token', '401');
     this.setAccessToken(ctx.SPOTIFY_TOKEN);
   }
 }
