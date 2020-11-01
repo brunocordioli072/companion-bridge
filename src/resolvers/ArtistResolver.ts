@@ -10,10 +10,11 @@ export class ArtistResolver {
 
   @Query(() => [Artist], {name: 'artists'})
   async searchArtists(
+    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
+    @Arg('limit', {nullable: true}) limit: number = 12,
     @Arg('query', {nullable: true}) query?: string,
     @Arg('name', {nullable: true}) artistName?: string,
     @Arg('track', {nullable: true}) trackName?: string,
-    @Arg('limit', {nullable: true}) limit = 12,
     @Ctx() ctx?: Context
   ): Promise<Artist[]> {
     this.spotifyService.setTokenByContext(ctx);
