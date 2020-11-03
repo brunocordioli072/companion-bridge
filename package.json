@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/config": "0.0.36",
     "@types/graphql": "^14.5.0",
     "@types/lodash": "^4.14.161",
     "@types/node": "^14.11.2",
@@ -32,6 +33,7 @@
     "apollo-server-lambda": "^2.18.1",
     "apollo-server-plugin-base": "^0.10.1",
     "class-validator": "^0.12.2",
+    "config": "^3.3.2",
     "graphql": "^15.3.0",
     "graphql-scalars": "^1.2.7",
     "graphql-type-json": "^0.3.2",

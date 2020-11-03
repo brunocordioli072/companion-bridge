@@ -4,12 +4,15 @@ import {Artist} from '../entities/Artist';
 import _ from 'lodash';
 import {ApolloError} from 'apollo-server-lambda';
 import {Context} from 'vm';
+import config from 'config';
+
 @Service()
 export class SpotifyService extends SpotifyWebApi {
   constructor() {
+    const SPOTIFY_CONFIG: any = config.get('spotify');
     super({
-      clientId: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
+      clientId: SPOTIFY_CONFIG.CLIENT_ID,
+      clientSecret: SPOTIFY_CONFIG.CLIENT_SECRET,
     });
   }
 
